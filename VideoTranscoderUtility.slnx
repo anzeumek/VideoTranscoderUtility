@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="VideoTranscoder.GUI/VideoTranscoder.GUI.csproj" />
+  <Project Path="VideoTranscoder.Service/VideoTranscoder.Service.csproj" Id="d8d9e264-d9b9-4a62-8b87-14e7a69c907c" />
+  <Project Path="VideoTranscoder.Shared/VideoTranscoder.Shared.csproj" />
+</Solution>

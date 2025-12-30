@@ -24,25 +24,25 @@ Video Transcoder Service is a Windows application that automatically transcodes 
 
 Configure directories, HandBrake parameters, and scheduling:
 
-![Settings Tab](s1.png)
+![Settings Tab](s1.PNG)
 
 ### Real-time Progress Tracking
 
 Monitor transcoding progress with live updates:
 
-![Progress Tab](s3.png)
+![Progress Tab](s3.PNG)
 
 ### History Management
 
 View and manage transcoded files:
 
-![History Tab](s2.png)
+![History Tab](s2.PNG)
 
 ### Service Logs
 
 Browse detailed logs from HandBrake and FFmpeg:
 
-![Logs Tab](s4.png)
+![Logs Tab](s4.PNG)
 
 ## Installation
 

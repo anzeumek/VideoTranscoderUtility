@@ -12,13 +12,8 @@ namespace VideoTranscoder.Shared
         public bool PreserveFolderStructure { get; set; } = true;
         public string HandBrakePath { get; set; } = @"C:\Program Files\HandBrake\HandBrakeCLI.exe";
 
-        // Transcoding rules
-        //public int MaxResolutionHeight { get; set; } = 1080;
-        //public string TargetCodec { get; set; } = "H.265";
-        //public int TargetBitrate { get; set; } = 2500; // kbps
-
         public string FFmpegPath { get; set; } = @"C:\Program Files\ffmpeg\bin\ffmpeg.exe";
-        public string HandBrakeParameters { get; set; } = "--format av_mp4 --crop-mode none --encoder x265 --quality 21 --keep-metadata --drc 2.0 --aencoder copy:aac --audio-lang-list slv,eng --subtitle-lang-list slv,eng --all-subtitles";
+        public string HandBrakeParameters { get; set; } = "--format av_mp4 --crop-mode none --encoder x265 --quality 20 --keep-metadata --drc 2.0 --aencoder copy:aac --audio-lang-list slv,eng --subtitle-lang-list slv,eng --all-subtitles";
 
         // Scheduling
         public bool RunOnSchedule { get; set; } = true;
@@ -39,6 +34,7 @@ namespace VideoTranscoder.Shared
         public bool ExtractSubtitles { get; set; } = false;
         public string SubtitleFormats { get; set; } = "srt, ass, vtt"; // Comma-separated
         public bool ConvertToSrtIfMissing { get; set; } = true;
+        public bool CopyExternalSubtitles { get; set; } = true;
 
 
         // Processing rules

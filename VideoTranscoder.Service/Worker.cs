@@ -76,7 +76,7 @@ namespace VideoTranscoder.Service
                         // Check for stop signal
                         if (ServiceControl.IsStopRequested())
                         {
-                            return;
+                            continue;
                         }
 
                         _logger.LogInformation("Videos processed. Next check will be in: " + _settings.CheckIntervalMinutes);
@@ -95,7 +95,7 @@ namespace VideoTranscoder.Service
                         // Check for stop signal
                         if (ServiceControl.IsStopRequested())
                         {
-                            return;
+                            continue;
                         }
                      
                         TimeSpan waitTime = timeUntilNextWindow > TimeSpan.FromMinutes(5)
@@ -114,7 +114,7 @@ namespace VideoTranscoder.Service
                     // Check for stop signal
                     if (ServiceControl.IsStopRequested())
                     {
-                        return;
+                        continue;
                     }
 
                     await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
@@ -341,7 +341,150 @@ namespace VideoTranscoder.Service
             }
         }
 
-        private void ExtractSubtitles(string inputFile, string outputDirectory)
+        private void CopyExternalSubtitles(string inputFile, string outputDirectory)
+        {
+            if (!_settings.CopyExternalSubtitles)
+                return;
+
+            try
+            {
+                string inputDir = Path.GetDirectoryName(inputFile);
+                string inputFileName = Path.GetFileNameWithoutExtension(inputFile);
+
+                // Create subs folder in output directory
+                string outputSubsFolder = Path.Combine(outputDirectory, "subs");
+                Directory.CreateDirectory(outputSubsFolder);
+
+                // Common subtitle extensions
+                //string[] subtitleExtensions = { ".srt", ".ass", ".ssa", ".vtt", ".sub", ".idx", ".sup" };
+                string[] subtitleExtensions = _settings.SubtitleFormats.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToArray();
+
+                // Track copied subtitles
+                int copiedCount = 0;
+
+                // 1. Check for subtitles in the same directory as the video file
+                LogToFile($"Searching for external subtitles for: {inputFileName}", "INFO");
+
+                foreach (var ext in subtitleExtensions)
+                {
+                    // Look for exact match: MovieName.srt, MovieName.eng.srt, etc.
+                    var matchingFiles = Directory.GetFiles(inputDir, $"{inputFileName}*{ext}", SearchOption.TopDirectoryOnly);
+
+                    foreach (var subtitleFile in matchingFiles)
+                    {
+                        string subtitleFileName = Path.GetFileName(subtitleFile);
+                        string destinationPath = Path.Combine(outputSubsFolder, subtitleFileName);
+
+                        try
+                        {
+                            File.Copy(subtitleFile, destinationPath, overwrite: true);
+                            LogToFile($"Copied external subtitle: {subtitleFileName}", "SUCCESS");
+                            copiedCount++;
+                        }
+                        catch (Exception ex)
+                        {
+                            LogToFile($"Failed to copy {subtitleFileName}: {ex.Message}", "WARNING");
+                        }
+                    }
+                }
+
+                // 2. Check for "subs" subfolder in the input directory
+                string inputSubsFolder = Path.Combine(inputDir, "subs");
+
+                if (Directory.Exists(inputSubsFolder))
+                {
+                    LogToFile($"Found 'subs' directory: {inputSubsFolder}", "INFO");
+
+                    foreach (var ext in subtitleExtensions)
+                    {
+                        // Look for subtitles with matching base name
+                        var matchingFiles = Directory.GetFiles(inputSubsFolder, $"{inputFileName}*{ext}", SearchOption.TopDirectoryOnly);
+
+                        foreach (var subtitleFile in matchingFiles)
+                        {
+                            string subtitleFileName = Path.GetFileName(subtitleFile);
+                            string destinationPath = Path.Combine(outputSubsFolder, subtitleFileName);
+
+                            // Skip if already copied (avoid duplicates)
+                            /*
+                            if (File.Exists(destinationPath))
+                            {
+                                LogToFile($"Subtitle already exists, skipping: {subtitleFileName}", "INFO");
+                                continue;
+                            }
+                            */
+
+                            try
+                            {
+                                File.Copy(subtitleFile, destinationPath, overwrite: true);
+                                LogToFile($"Copied external subtitle from subs folder: {subtitleFileName}", "SUCCESS");
+                                copiedCount++;
+                            }
+                            catch (Exception ex)
+                            {
+                                LogToFile($"Failed to copy {subtitleFileName}: {ex.Message}", "WARNING");
+                            }
+                        }
+                    }
+                }
+                
+                // 3. Check for "subtitles" subfolder in the input directory
+                string inputSubtitlesFolder = Path.Combine(inputDir, "subtitles");
+
+                if (Directory.Exists(inputSubtitlesFolder))
+                {
+                    LogToFile($"Found 'subtitles' directory: {inputSubtitlesFolder}", "INFO");
+
+                    foreach (var ext in subtitleExtensions)
+                    {
+                        // Look for subtitles with matching base name
+                        var matchingFiles = Directory.GetFiles(inputSubtitlesFolder, $"{inputFileName}*{ext}", SearchOption.TopDirectoryOnly);
+
+                        foreach (var subtitleFile in matchingFiles)
+                        {
+                            string subtitleFileName = Path.GetFileName(subtitleFile);
+                            string destinationPath = Path.Combine(outputSubsFolder, subtitleFileName);
+
+                            // Skip if already copied (avoid duplicates)
+                            /*
+                            if (File.Exists(destinationPath))
+                            {
+                                LogToFile($"Subtitle already exists, skipping: {subtitleFileName}", "INFO");
+                                continue;
+                            }
+                            */
+
+                            try
+                            {
+                                File.Copy(subtitleFile, destinationPath, overwrite: true);
+                                LogToFile($"Copied external subtitle from subs folder: {subtitleFileName}", "SUCCESS");
+                                copiedCount++;
+                            }
+                            catch (Exception ex)
+                            {
+                                LogToFile($"Failed to copy {subtitleFileName}: {ex.Message}", "WARNING");
+                            }
+                        }
+                    }
+                }
+
+                if (copiedCount > 0)
+                {
+                    _logger.LogInformation("Copied {Count} external subtitle file(s) for: {File}", copiedCount, inputFile);
+                    LogToFile($"Total external subtitles copied: {copiedCount}", "INFO");
+                }
+                else
+                {
+                    LogToFile($"No external subtitles found for: {inputFileName}", "INFO");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error copying external subtitles from: {File}", inputFile);
+                LogToFile($"Error copying external subtitles: {ex.Message}", "ERROR");
+            }
+        }
+        private void ExtractSubtitles(string inputFile, string outputDirectory, DateTime startTime)
         {
             if (!_settings.ExtractSubtitles)
                 return;
@@ -362,6 +505,7 @@ namespace VideoTranscoder.Service
                     IsTranscoding = true,
                     IsExtractingSubtitles = true,
                     CurrentFile = inputFile,
+                    StartTime = startTime,
                     Status = "Analyzing subtitles...",
                     SubtitleExtractionStatus = "Probing video file for subtitle streams"
                 });
@@ -370,7 +514,8 @@ namespace VideoTranscoder.Service
                 var probeInfo = new ProcessStartInfo
                 {
                     FileName = _settings.FFmpegPath,
-                    Arguments = $"-i \"{inputFile}\"",
+                    Arguments = $"-y -i \"{inputFile}\"",
+                    RedirectStandardInput = true,
                     RedirectStandardError = true,
                     RedirectStandardOutput = true,
                     UseShellExecute = false,
@@ -458,6 +603,7 @@ namespace VideoTranscoder.Service
                         IsTranscoding = true,
                         IsExtractingSubtitles = false,
                         CurrentFile = inputFile,
+                        StartTime = _currentTranscodeStartTime,
                         Status = "No subtitles found",
                         SubtitleExtractionStatus = "No subtitle streams detected"
                     });
@@ -478,6 +624,7 @@ namespace VideoTranscoder.Service
                     IsTranscoding = true,
                     IsExtractingSubtitles = true,
                     CurrentFile = inputFile,
+                    StartTime = _currentTranscodeStartTime,
                     Status = "Extracting subtitles...",
                     SubtitleExtractionStatus = $"Found {subtitleStreams.Count} subtitle stream(s)",
                     TotalSubtitleStreams = subtitleStreams.Count,
@@ -504,6 +651,7 @@ namespace VideoTranscoder.Service
                         IsTranscoding = true,
                         IsExtractingSubtitles = true,
                         CurrentFile = inputFile,
+                        StartTime = _currentTranscodeStartTime,
                         Status = "Extracting subtitles...",
                         SubtitleExtractionStatus = $"Extracting subtitle {i + 1}/{subtitleStreams.Count} ({language}, {codec})",
                         TotalSubtitleStreams = subtitleStreams.Count,
@@ -535,6 +683,7 @@ namespace VideoTranscoder.Service
                     IsTranscoding = true,
                     IsExtractingSubtitles = true,
                     CurrentFile = inputFile,
+                    StartTime = _currentTranscodeStartTime,
                     Status = "Extracting subtitles...",
                     SubtitleExtractionStatus = $"Extracted {extractedFiles.Count}/{subtitleStreams.Count} subtitle streams",
                     TotalSubtitleStreams = subtitleStreams.Count,
@@ -550,6 +699,7 @@ namespace VideoTranscoder.Service
                         IsTranscoding = true,
                         IsExtractingSubtitles = true,
                         CurrentFile = inputFile,
+                        StartTime = _currentTranscodeStartTime,
                         Status = "Converting subtitles...",
                         SubtitleExtractionStatus = "Converting to SRT format...",
                         TotalSubtitleStreams = subtitleStreams.Count,
@@ -584,6 +734,7 @@ namespace VideoTranscoder.Service
                     IsTranscoding = true,
                     IsExtractingSubtitles = false,
                     CurrentFile = inputFile,
+                    StartTime = _currentTranscodeStartTime,
                     Status = "Subtitle extraction complete",
                     SubtitleExtractionStatus = $"Completed: {extractedFiles.Count} subtitle(s) extracted",
                     TotalSubtitleStreams = subtitleStreams.Count,
@@ -601,6 +752,7 @@ namespace VideoTranscoder.Service
                     IsTranscoding = true,
                     IsExtractingSubtitles = false,
                     CurrentFile = inputFile,
+                    StartTime = _currentTranscodeStartTime,
                     Status = "Subtitle extraction failed",
                     SubtitleExtractionStatus = $"Error: {ex.Message}"
                 });
@@ -645,21 +797,23 @@ namespace VideoTranscoder.Service
                 string extractArgs;
                 if (needsConversion)
                 {
-                    extractArgs = $"-i \"{inputFile}\" -map 0:{streamIndex} -f {GetFFmpegFormat(outputFormat)} \"{outputPath}\"";
+                    extractArgs = $"-y -i \"{inputFile}\" -map 0:{streamIndex} -f {GetFFmpegFormat(outputFormat)} \"{outputPath}\"";
                 }
                 else
                 {
-                    extractArgs = $"-i \"{inputFile}\" -map 0:{streamIndex} -c copy \"{outputPath}\"";
+                    extractArgs = $"-y -i \"{inputFile}\" -map 0:{streamIndex} -c copy \"{outputPath}\"";
                 }
 
                 var extractInfo = new ProcessStartInfo
                 {
                     FileName = _settings.FFmpegPath,
                     Arguments = extractArgs,
+                    RedirectStandardInput = true,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     UseShellExecute = false,
                     CreateNoWindow = true
+
                 };
 
                 _logger.LogInformation("Extracting single subtitle stream {Index} to: {Output}", streamIndex, outputPath);
@@ -764,12 +918,13 @@ namespace VideoTranscoder.Service
                     return;
                 }
 
-                string convertArgs = $"-i \"{subtitlePath}\" -f srt \"{srtOutputPath}\"";
+                string convertArgs = $"-y -i \"{subtitlePath}\" -f srt \"{srtOutputPath}\"";
 
                 var convertInfo = new ProcessStartInfo
                 {
                     FileName = _settings.FFmpegPath,
                     Arguments = convertArgs,
+                    RedirectStandardInput = true,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     UseShellExecute = false,
@@ -846,8 +1001,14 @@ namespace VideoTranscoder.Service
             string outputFile;
             if (_settings.PreserveFolderStructure)
             {
+                string rootFolderName = new DirectoryInfo(sourceDirectory).Name;
                 string relativePath = Path.GetRelativePath(sourceDirectory, inputFile);
-                outputFile = Path.Combine(_settings.OutputDirectory, relativePath);
+
+                outputFile = Path.Combine(
+                    _settings.OutputDirectory,
+                    rootFolderName,
+                    relativePath
+                );
             }
             else
             {
@@ -870,12 +1031,23 @@ namespace VideoTranscoder.Service
             // Track current output file
             _currentOutputFile = outputFile;
 
+            DateTime startTime = DateTime.Now;
+            _currentTranscodeStartTime = startTime; // Store it as a field so event handlers can access it
+
+            // Copy external subtitles before extraction
+            if (_settings.CopyExternalSubtitles)
+            {
+                _logger.LogInformation("Copying external subtitles for: {Input}", inputFile);
+                LogToFile($"Copying external subtitles for: {inputFile}");
+                CopyExternalSubtitles(inputFile, outputDir);
+            }
+
             // Extract subtitles BEFORE transcoding
             if (_settings.ExtractSubtitles)
             {
                 _logger.LogInformation("Extracting subtitles from: {Input}", inputFile);
                 LogToFile($"Extracting subtitles from: {inputFile}");
-                ExtractSubtitles(inputFile, outputDir);
+                ExtractSubtitles(inputFile, outputDir, startTime);
 
                 // Check for stop signal after subtitle extraction
                 if (ServiceControl.IsStopRequested())
@@ -884,10 +1056,6 @@ namespace VideoTranscoder.Service
                     return;
                 }
             }
-
-            DateTime startTime = DateTime.Now;
-            _currentTranscodeStartTime = startTime; // Store it as a field so event handlers can access it
-
 
             // Set initial progress
             ProgressManager.Save(new TranscodeProgress
@@ -914,6 +1082,7 @@ namespace VideoTranscoder.Service
             {
                 FileName = _settings.HandBrakePath,
                 Arguments = args,
+                RedirectStandardInput = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,

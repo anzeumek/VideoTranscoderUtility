@@ -67,6 +67,7 @@ namespace VideoTranscoder.GUI
             chkExtractSubtitles.Checked = _settings.ExtractSubtitles;
             txtSubtitleFormats.Text = _settings.SubtitleFormats;
             chkConvertToSrt.Checked = _settings.ConvertToSrtIfMissing;
+            chkCopyExternalSubs.Checked = _settings.CopyExternalSubtitles;
 
             chkDeleteOriginal.Checked = _settings.DeleteOriginalAfterTranscode;
         }
@@ -122,6 +123,7 @@ namespace VideoTranscoder.GUI
             _settings.ExtractSubtitles = chkExtractSubtitles.Checked;
             _settings.SubtitleFormats = txtSubtitleFormats.Text;
             _settings.ConvertToSrtIfMissing = chkConvertToSrt.Checked;
+            _settings.CopyExternalSubtitles = chkCopyExternalSubs.Checked;
 
             // Source video file
             _settings.DeleteOriginalAfterTranscode = chkDeleteOriginal.Checked;
@@ -661,7 +663,7 @@ namespace VideoTranscoder.GUI
 
                     MessageBox.Show(
                         "Stop signal sent to service.\n\n" +
-                        "The current operation will be stopped within a few seconds.\n" +
+                        "The current operation will be stopped within a few seconds and service will stop on next interval check.\n" +
                         "Incomplete files will be deleted.",
                         "Stop Requested",
                         MessageBoxButtons.OK,

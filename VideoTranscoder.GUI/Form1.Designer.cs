@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             listBoxDirectories = new ListBox();
             btnAddDirectory = new Button();
             btnRemoveDirectory = new Button();
@@ -100,6 +101,7 @@
             btnClearLog = new Button();
             btnRefreshLog = new Button();
             txtLog = new RichTextBox();
+            chkCopyExternalSubs = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)numCheckInterval).BeginInit();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
@@ -373,6 +375,7 @@
             // 
             // groupBox3
             // 
+            groupBox3.Controls.Add(chkCopyExternalSubs);
             groupBox3.Controls.Add(chkExtractSubtitles);
             groupBox3.Controls.Add(labelFfmpegPath);
             groupBox3.Controls.Add(txtFFmpegPath);
@@ -418,9 +421,9 @@
             labelSubtitleFormats.AutoSize = true;
             labelSubtitleFormats.Location = new Point(561, 83);
             labelSubtitleFormats.Name = "labelSubtitleFormats";
-            labelSubtitleFormats.Size = new Size(256, 20);
+            labelSubtitleFormats.Size = new Size(291, 20);
             labelSubtitleFormats.TabIndex = 4;
-            labelSubtitleFormats.Text = "Subtitle Formats (comma-separated):";
+            labelSubtitleFormats.Text = "Valid subtitle Formats (comma-separated):";
             // 
             // txtSubtitleFormats
             // 
@@ -677,6 +680,7 @@
             dgvHistory.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvHistory.Size = new Size(972, 706);
             dgvHistory.TabIndex = 0;
+            dgvHistory.ColumnHeaderMouseClick += dgvHistory_ColumnHeaderMouseClick;
             // 
             // tabPage3
             // 
@@ -862,14 +866,25 @@
             txtLog.TabIndex = 0;
             txtLog.Text = "";
             // 
+            // chkCopyExternalSubs
+            // 
+            chkCopyExternalSubs.AutoSize = true;
+            chkCopyExternalSubs.Location = new Point(17, 86);
+            chkCopyExternalSubs.Name = "chkCopyExternalSubs";
+            chkCopyExternalSubs.Size = new Size(181, 24);
+            chkCopyExternalSubs.TabIndex = 6;
+            chkCopyExternalSubs.Text = "Copy external subtitles";
+            chkCopyExternalSubs.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1182, 753);
             Controls.Add(tabControl1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form1";
-            Text = "Form1";
+            Text = "VideoTranscoderUtility";
             ((System.ComponentModel.ISupportInitialize)numCheckInterval).EndInit();
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
@@ -967,5 +982,6 @@
         private GroupBox groupBox3;
         private GroupBox groupBox4;
         private GroupBox groupBox5;
+        private CheckBox chkCopyExternalSubs;
     }
 }

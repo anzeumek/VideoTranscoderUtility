@@ -1,12 +1,12 @@
-# Video Transcoder Service
+# Video Transcoder Utility
 
 <p align="center"> <img src="https://img.shields.io/badge/.NET-10.0-512BD4?style=flat&logo=dotnet&logoColor=white" alt=".NET"/> <img src="https://img.shields.io/badge/C%23-12.0-239120?style=flat&logo=csharp&logoColor=white" alt="C#"/> <img src="https://img.shields.io/badge/Windows-Service-0078D6?style=flat&logo=windows&logoColor=white" alt="Windows"/> <img src="https://img.shields.io/badge/HandBrake-CLI-FF6720?style=flat&logo=handbrake&logoColor=white" alt="HandBrake"/> <img src="https://img.shields.io/badge/FFmpeg-Latest-007808?style=flat&logo=ffmpeg&logoColor=white" alt="FFmpeg"/> </p>
 
-> 🎬 **Automated video transcoding service for Windows** - Schedule bulk video conversions with HandBrake and extract subtitles with FFmpeg, all running as a background Windows service.
+> 🎬 **Automated video transcoding service with GUI for Windows** - Schedule bulk video conversions with HandBrake and extract subtitles with FFmpeg, all running as a background Windows service.
 
 ## Overview
 
-Video Transcoder Service is a Windows application that automatically transcodes video files on a schedule. It monitors specified directories, transcodes videos using HandBrake, and optionally extracts subtitles using FFmpeg - all while running silently in the background as a Windows service.
+Video Transcoder Utility is a Windows application that automatically transcodes video files on a schedule. It monitors specified directories, transcodes videos using HandBrake, and optionally extracts subtitles using FFmpeg - all while running silently in the background as a Windows service.
 
 **Key Features:**
 
@@ -158,6 +158,11 @@ sc start VideoTranscoderService
 -   Prioritizes English subtitles for conversion
 -   Subtitles saved in organized `subs/` folders
 
+### Copy External Subtitles
+
+-   Copies selected subtitle files that are in the same folder as video files
+-   Copies selected subtitle files that are in "subs" or "subtitles" folder next to video files
+
 ### Smart History Tracking
 
 -   Remembers all transcoded files
@@ -203,12 +208,13 @@ Output:
 
 ```
 E:\Transcoded\
-└── Movies\
-    └── Action\
-        ├── Movie.mkv
-        └── subs\
-            ├── Movie.eng.srt
-            └── Movie.spa.srt
+└── Videos\
+    └── Movies\
+        └── Action\
+            ├── Movie.mkv
+            └── subs\
+                ├── Movie.eng.srt
+                └── Movie.spa.srt
 
 ```
 

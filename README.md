@@ -7,7 +7,7 @@
 </br>
 <p align="center">
   <a href="https://github.com/anzeumek/VideoTranscoderUtility/releases/latest">
-    <img src="https://img.shields.io/badge/Download-Latest_Release-blue?style=for-the-badge&logo=github" style="width:30%;" />
+    <img src="https://img.shields.io/badge/Download-Latest_Release-blue?style=for-the-badge&logo=github" />
   </a>
 </p>
 

@@ -1,5 +1,5 @@
-<p align="left">
-![Title](title.png)
+<p align="center">
+<img src="title.png" alt="Video Transcoder Utility" min-width="300" width="60%">
 </p>
 
 <p align="center"> <img src="https://img.shields.io/badge/.NET-10.0-512BD4?style=flat&logo=dotnet&logoColor=white" alt=".NET"/> <img src="https://img.shields.io/badge/C%23-12.0-239120?style=flat&logo=csharp&logoColor=white" alt="C#"/> <img src="https://img.shields.io/badge/Windows-Service-0078D6?style=flat&logo=windows&logoColor=white" alt="Windows"/> <img src="https://img.shields.io/badge/HandBrake-CLI-FF6720?style=flat&logo=handbrake&logoColor=white" alt="HandBrake"/> <img src="https://img.shields.io/badge/FFmpeg-Latest-007808?style=flat&logo=ffmpeg&logoColor=white" alt="FFmpeg"/> </p>

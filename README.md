@@ -4,6 +4,13 @@
 
 > 🎬 **Automated video transcoding service with GUI for Windows** - Schedule bulk video conversions with HandBrake and extract subtitles with FFmpeg, all running as a background Windows service.
 
+</br>
+<p align="center">
+  <a href="https://github.com/anzeumek/VideoTranscoderUtility/releases/latest">
+    <img src="https://img.shields.io/badge/Download-Latest_Release-blue?style=for-the-badge&logo=github" style="width:30%;" />
+  </a>
+</p>
+
 ## Overview
 
 Video Transcoder Utility is a Windows application that automatically transcodes video files on a schedule. It monitors specified directories, transcodes videos using HandBrake, and optionally extracts subtitles using FFmpeg - all while running silently in the background as a Windows service.

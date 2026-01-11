@@ -52,9 +52,7 @@ namespace VideoTranscoder.Shared
         public static bool IsAlreadyTranscoded(string filePath)
         {
             var history = Load();
-            return history.Entries.Any(e =>
-                e.SourceFilePath.Equals(filePath, StringComparison.OrdinalIgnoreCase) &&
-                e.Success);
+            return history.Entries.Any(e => e.SourceFilePath.Equals(filePath, StringComparison.OrdinalIgnoreCase));
         }
 
         public static void AddEntry(string sourceFile, string outputFile, bool success)

@@ -14,6 +14,7 @@ Video Transcoder Utility is a Windows application that automatically transcodes 
 -   **Folder Monitoring** 📁 - Automatically processes videos in monitored directories
 -   **Smart History** 🎯 - Never transcodes the same file twice
 -   **Subtitle Extraction** 📝 - Extract and convert subtitles to SRT format
+-   **Missing Subtitle Download** 📥 - Download missing subtitles by video hash
 -   **Real-time Progress** 📊 - Track transcoding progress with detailed statistics
 -   **Flexible Configuration** 🔧 - Custom HandBrake parameters for any workflow
 -   **Automatic Logging** 💾  - Comprehensive logs with automatic rotation
@@ -22,7 +23,7 @@ Video Transcoder Utility is a Windows application that automatically transcodes 
 
 ### Settings Configuration
 
-Configure directories, HandBrake parameters, and scheduling:
+Configure directories, settings, HandBrake parameters, and scheduling:
 
 ![Settings Tab](s1.PNG)
 
@@ -154,14 +155,18 @@ sc start VideoTranscoderService
 ### Automatic Subtitle Extraction
 
 -   Extracts all subtitle tracks from video files
--   Automatically converts some non-SRT subtitles to SRT format
--   Prioritizes English subtitles for conversion
+-   Automatically converts some included non-SRT subtitles to SRT format
 -   Subtitles saved in organized `subs/` folders
 
 ### Copy External Subtitles
 
 -   Copies selected subtitle files that are in the same folder as video files
 -   Copies selected subtitle files that are in "subs" or "subtitles" folder next to video files
+
+### Download Missing Subtitles
+
+-   Searches for missing subtitles by video hash and tries to download them using OpenSubtitles rest api
+-   Use your own account and api key from https://www.opensubtitles.com/
 
 ### Smart History Tracking
 
@@ -281,7 +286,7 @@ VideoTranscoder/
 1.  **Service monitors** for scheduled time windows
 2.  **Scans directories** for video files
 3.  **Checks history** to skip already-transcoded files
-4.  **Extracts subtitles** (if enabled) using FFmpeg
+4.  **Extracts/copies/downloads subtitles** (if enabled) using FFmpeg and OpenSubtitles
 5.  **Transcodes video** using HandBrake with custom parameters
 6.  **Updates history** and progress files
 7.  **Logs everything** for debugging and monitoring
@@ -292,7 +297,7 @@ The service and GUI communicate through shared JSON files:
 
 -   Settings are reloaded by the service every scan
 -   Progress is written by service, read by GUI every 2 seconds
--   No network communication required
+-   No network communication required (except for subtitle download)
 
 ## Building from Source
 
@@ -388,10 +393,12 @@ This project is licensed under the MIT License.
 -   **HandBrake** - Powerful video transcoding engine
 -   **FFmpeg** - Comprehensive multimedia framework
 -   **Inno Setup** - Installer creation tool
+-   **OpenSubtitles** - API for downloading subtitles
 
 ###  Disclaimer
 This application depends on third-party software to function correctly.
 These tools are **not bundled** with this application. You must install them separately and ensure they are accessible via your system PATH or configured correctly for the application to detect them.
+This application provides just tools for downloading subtitles. Download from OpenSubtitles can be used only with your own account and api key.
 
 ### Third-Party Software
 All third-party tools are:

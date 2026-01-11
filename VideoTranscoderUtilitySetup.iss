@@ -1,6 +1,6 @@
 [Setup]
 AppName=Video Transcoder Utility
-AppVersion=1.0.0
+AppVersion=1.1.0
 AppPublisher=Anze Umek
 DefaultDirName={autopf}\VideoTranscoder
 DefaultGroupName=Video Transcoder
@@ -70,6 +70,24 @@ begin
     else
     begin
       Result := False;
+    end;
+  end;
+end;
+
+procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+var
+  DataDir: String;
+begin
+  if CurUninstallStep = usUninstall then
+  begin
+    DataDir := ExpandConstant('{commonappdata}\VideoTranscoder');
+    if DirExists(DataDir) then
+    begin
+      if MsgBox('Do you want to delete all application data and settings from:' + #13#10 + 
+                DataDir + '?', mbConfirmation, MB_YESNO) = IDYES then
+      begin
+        DelTree(DataDir, True, True, True);
+      end;
     end;
   end;
 end;

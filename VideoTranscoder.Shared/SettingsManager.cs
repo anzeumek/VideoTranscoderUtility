@@ -18,7 +18,9 @@ namespace VideoTranscoder.Shared
                 if (File.Exists(SettingsPath))
                 {
                     string json = File.ReadAllText(SettingsPath);
-                    return JsonSerializer.Deserialize<TranscoderSettings>(json) ?? new TranscoderSettings();
+                    TranscoderSettings res = JsonSerializer.Deserialize<TranscoderSettings>(json) ?? new TranscoderSettings();
+                    res.SubtitleLanguagesDictionary = LanguageCodeUtils.BuildLanguageMapping(res.GetSubtitleLanguagesList());
+                    return res;
                 }
             }
             catch (Exception ex)

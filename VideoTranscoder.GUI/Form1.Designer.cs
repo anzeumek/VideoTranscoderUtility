@@ -48,17 +48,32 @@
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
             groupBox5 = new GroupBox();
+            chkPreserveFolderStructure = new CheckBox();
             groupBox4 = new GroupBox();
+            cbEnableTranscoding = new CheckBox();
             labelOutputFileExtension = new Label();
             txtOutputFileExtension = new TextBox();
-            chkPreserveFolderStructure = new CheckBox();
+            chkOverwriteExistingVideos = new CheckBox();
             btnBrowseOutput = new Button();
             btnBrowseHandbrake = new Button();
             groupBox3 = new GroupBox();
+            groupBox6 = new GroupBox();
+            cbDownloadMissingSubs = new CheckBox();
+            txtOpenSubtitlesAppName = new TextBox();
+            txtOpenSubtitlesApiKey = new TextBox();
+            txtOpenSubtitlesUsername = new TextBox();
+            txtOpenSubtitlesPassword = new TextBox();
+            label6 = new Label();
+            label3 = new Label();
+            label4 = new Label();
+            label5 = new Label();
+            chkCopyExternalSubs = new CheckBox();
             chkExtractSubtitles = new CheckBox();
             labelFfmpegPath = new Label();
             txtFFmpegPath = new TextBox();
+            label2 = new Label();
             labelSubtitleFormats = new Label();
+            txtSubtitleLanguages = new TextBox();
             txtSubtitleFormats = new TextBox();
             chkConvertToSrt = new CheckBox();
             btnBrowseFFmpeg = new Button();
@@ -101,13 +116,14 @@
             btnClearLog = new Button();
             btnRefreshLog = new Button();
             txtLog = new RichTextBox();
-            chkCopyExternalSubs = new CheckBox();
+            chkOverwriteExistingSubtitles = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)numCheckInterval).BeginInit();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             groupBox5.SuspendLayout();
             groupBox4.SuspendLayout();
             groupBox3.SuspendLayout();
+            groupBox6.SuspendLayout();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             tabPage2.SuspendLayout();
@@ -121,7 +137,7 @@
             listBoxDirectories.FormattingEnabled = true;
             listBoxDirectories.Location = new Point(179, 17);
             listBoxDirectories.Name = "listBoxDirectories";
-            listBoxDirectories.Size = new Size(364, 344);
+            listBoxDirectories.Size = new Size(364, 304);
             listBoxDirectories.TabIndex = 0;
             // 
             // btnAddDirectory
@@ -162,7 +178,7 @@
             // 
             // txtHandBrakePath
             // 
-            txtHandBrakePath.Location = new Point(6, 105);
+            txtHandBrakePath.Location = new Point(6, 128);
             txtHandBrakePath.Name = "txtHandBrakePath";
             txtHandBrakePath.Size = new Size(473, 27);
             txtHandBrakePath.TabIndex = 3;
@@ -170,7 +186,7 @@
             // labelHandbrakePath
             // 
             labelHandbrakePath.AutoSize = true;
-            labelHandbrakePath.Location = new Point(6, 82);
+            labelHandbrakePath.Location = new Point(6, 105);
             labelHandbrakePath.Name = "labelHandbrakePath";
             labelHandbrakePath.Size = new Size(119, 20);
             labelHandbrakePath.TabIndex = 4;
@@ -179,7 +195,7 @@
             // labelChecknterval
             // 
             labelChecknterval.AutoSize = true;
-            labelChecknterval.Location = new Point(17, 65);
+            labelChecknterval.Location = new Point(331, 23);
             labelChecknterval.Name = "labelChecknterval";
             labelChecknterval.Size = new Size(158, 20);
             labelChecknterval.TabIndex = 4;
@@ -187,7 +203,7 @@
             // 
             // numCheckInterval
             // 
-            numCheckInterval.Location = new Point(17, 88);
+            numCheckInterval.Location = new Point(331, 46);
             numCheckInterval.Maximum = new decimal(new int[] { 1440, 0, 0, 0 });
             numCheckInterval.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numCheckInterval.Name = "numCheckInterval";
@@ -198,7 +214,7 @@
             // chkRunOnSchedule
             // 
             chkRunOnSchedule.AutoSize = true;
-            chkRunOnSchedule.Location = new Point(17, 26);
+            chkRunOnSchedule.Location = new Point(13, 47);
             chkRunOnSchedule.Name = "chkRunOnSchedule";
             chkRunOnSchedule.Size = new Size(139, 24);
             chkRunOnSchedule.TabIndex = 6;
@@ -218,7 +234,7 @@
             // timeScheduleStart
             // 
             timeScheduleStart.Format = DateTimePickerFormat.Time;
-            timeScheduleStart.Location = new Point(182, 88);
+            timeScheduleStart.Location = new Point(496, 46);
             timeScheduleStart.Name = "timeScheduleStart";
             timeScheduleStart.ShowUpDown = true;
             timeScheduleStart.Size = new Size(112, 27);
@@ -227,7 +243,7 @@
             // labelSchedule
             // 
             labelSchedule.AutoSize = true;
-            labelSchedule.Location = new Point(182, 65);
+            labelSchedule.Location = new Point(496, 23);
             labelSchedule.Name = "labelSchedule";
             labelSchedule.Size = new Size(46, 20);
             labelSchedule.TabIndex = 4;
@@ -246,7 +262,7 @@
             // labelParameters
             // 
             labelParameters.AutoSize = true;
-            labelParameters.Location = new Point(6, 157);
+            labelParameters.Location = new Point(6, 158);
             labelParameters.Name = "labelParameters";
             labelParameters.Size = new Size(164, 20);
             labelParameters.TabIndex = 4;
@@ -254,9 +270,9 @@
             // 
             // txtParameters
             // 
-            txtParameters.Location = new Point(6, 179);
+            txtParameters.Location = new Point(6, 180);
             txtParameters.Name = "txtParameters";
-            txtParameters.Size = new Size(597, 123);
+            txtParameters.Size = new Size(597, 93);
             txtParameters.TabIndex = 9;
             txtParameters.Text = "";
             // 
@@ -299,15 +315,27 @@
             groupBox5.Controls.Add(chkDeleteOriginal);
             groupBox5.Controls.Add(btnAddDirectory);
             groupBox5.Controls.Add(btnRemoveDirectory);
+            groupBox5.Controls.Add(chkPreserveFolderStructure);
             groupBox5.Location = new Point(6, 7);
             groupBox5.Name = "groupBox5";
-            groupBox5.Size = new Size(549, 369);
+            groupBox5.Size = new Size(549, 333);
             groupBox5.TabIndex = 13;
             groupBox5.TabStop = false;
             groupBox5.Text = "Source";
             // 
+            // chkPreserveFolderStructure
+            // 
+            chkPreserveFolderStructure.AutoEllipsis = true;
+            chkPreserveFolderStructure.Location = new Point(6, 125);
+            chkPreserveFolderStructure.Name = "chkPreserveFolderStructure";
+            chkPreserveFolderStructure.Size = new Size(167, 53);
+            chkPreserveFolderStructure.TabIndex = 6;
+            chkPreserveFolderStructure.Text = "Preserve folder structure on output";
+            chkPreserveFolderStructure.UseVisualStyleBackColor = true;
+            // 
             // groupBox4
             // 
+            groupBox4.Controls.Add(cbEnableTranscoding);
             groupBox4.Controls.Add(labelOutputDir);
             groupBox4.Controls.Add(labelHandbrakePath);
             groupBox4.Controls.Add(txtHandBrakePath);
@@ -315,21 +343,34 @@
             groupBox4.Controls.Add(txtOutputFileExtension);
             groupBox4.Controls.Add(txtParameters);
             groupBox4.Controls.Add(txtOutputDir);
-            groupBox4.Controls.Add(chkPreserveFolderStructure);
+            groupBox4.Controls.Add(chkOverwriteExistingVideos);
             groupBox4.Controls.Add(btnBrowseOutput);
             groupBox4.Controls.Add(labelParameters);
             groupBox4.Controls.Add(btnBrowseHandbrake);
             groupBox4.Location = new Point(561, 7);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(607, 369);
+            groupBox4.Size = new Size(607, 333);
             groupBox4.TabIndex = 12;
             groupBox4.TabStop = false;
             groupBox4.Text = "Output";
             // 
+            // cbEnableTranscoding
+            // 
+            cbEnableTranscoding.AutoSize = true;
+            cbEnableTranscoding.Checked = true;
+            cbEnableTranscoding.CheckState = CheckState.Checked;
+            cbEnableTranscoding.Location = new Point(6, 78);
+            cbEnableTranscoding.Name = "cbEnableTranscoding";
+            cbEnableTranscoding.Size = new Size(234, 24);
+            cbEnableTranscoding.TabIndex = 7;
+            cbEnableTranscoding.Tag = "";
+            cbEnableTranscoding.Text = "Enable transcoding (else copy)";
+            cbEnableTranscoding.UseVisualStyleBackColor = true;
+            // 
             // labelOutputFileExtension
             // 
             labelOutputFileExtension.AutoSize = true;
-            labelOutputFileExtension.Location = new Point(6, 310);
+            labelOutputFileExtension.Location = new Point(6, 276);
             labelOutputFileExtension.Name = "labelOutputFileExtension";
             labelOutputFileExtension.Size = new Size(150, 20);
             labelOutputFileExtension.TabIndex = 4;
@@ -337,21 +378,23 @@
             // 
             // txtOutputFileExtension
             // 
-            txtOutputFileExtension.Location = new Point(6, 333);
+            txtOutputFileExtension.Location = new Point(6, 299);
             txtOutputFileExtension.Name = "txtOutputFileExtension";
             txtOutputFileExtension.Size = new Size(150, 27);
             txtOutputFileExtension.TabIndex = 3;
             txtOutputFileExtension.Text = "mp4";
             // 
-            // chkPreserveFolderStructure
+            // chkOverwriteExistingVideos
             // 
-            chkPreserveFolderStructure.AutoSize = true;
-            chkPreserveFolderStructure.Location = new Point(343, 335);
-            chkPreserveFolderStructure.Name = "chkPreserveFolderStructure";
-            chkPreserveFolderStructure.Size = new Size(260, 24);
-            chkPreserveFolderStructure.TabIndex = 6;
-            chkPreserveFolderStructure.Text = "Preserve folder structure on output";
-            chkPreserveFolderStructure.UseVisualStyleBackColor = true;
+            chkOverwriteExistingVideos.AutoSize = true;
+            chkOverwriteExistingVideos.Checked = true;
+            chkOverwriteExistingVideos.CheckState = CheckState.Checked;
+            chkOverwriteExistingVideos.Location = new Point(246, 78);
+            chkOverwriteExistingVideos.Name = "chkOverwriteExistingVideos";
+            chkOverwriteExistingVideos.Size = new Size(150, 24);
+            chkOverwriteExistingVideos.TabIndex = 6;
+            chkOverwriteExistingVideos.Text = "Overwrite existing";
+            chkOverwriteExistingVideos.UseVisualStyleBackColor = true;
             // 
             // btnBrowseOutput
             // 
@@ -365,7 +408,7 @@
             // 
             // btnBrowseHandbrake
             // 
-            btnBrowseHandbrake.Location = new Point(485, 103);
+            btnBrowseHandbrake.Location = new Point(485, 126);
             btnBrowseHandbrake.Name = "btnBrowseHandbrake";
             btnBrowseHandbrake.Size = new Size(118, 29);
             btnBrowseHandbrake.TabIndex = 8;
@@ -375,29 +418,137 @@
             // 
             // groupBox3
             // 
+            groupBox3.Controls.Add(groupBox6);
             groupBox3.Controls.Add(chkCopyExternalSubs);
             groupBox3.Controls.Add(chkExtractSubtitles);
             groupBox3.Controls.Add(labelFfmpegPath);
             groupBox3.Controls.Add(txtFFmpegPath);
+            groupBox3.Controls.Add(label2);
             groupBox3.Controls.Add(labelSubtitleFormats);
+            groupBox3.Controls.Add(txtSubtitleLanguages);
+            groupBox3.Controls.Add(chkOverwriteExistingSubtitles);
             groupBox3.Controls.Add(txtSubtitleFormats);
             groupBox3.Controls.Add(chkConvertToSrt);
             groupBox3.Controls.Add(btnBrowseFFmpeg);
-            groupBox3.Location = new Point(6, 382);
+            groupBox3.Location = new Point(6, 346);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(1162, 145);
+            groupBox3.Size = new Size(1162, 242);
             groupBox3.TabIndex = 11;
             groupBox3.TabStop = false;
             groupBox3.Text = "Subtitles";
             // 
+            // groupBox6
+            // 
+            groupBox6.Controls.Add(cbDownloadMissingSubs);
+            groupBox6.Controls.Add(txtOpenSubtitlesAppName);
+            groupBox6.Controls.Add(txtOpenSubtitlesApiKey);
+            groupBox6.Controls.Add(txtOpenSubtitlesUsername);
+            groupBox6.Controls.Add(txtOpenSubtitlesPassword);
+            groupBox6.Controls.Add(label6);
+            groupBox6.Controls.Add(label3);
+            groupBox6.Controls.Add(label4);
+            groupBox6.Controls.Add(label5);
+            groupBox6.Location = new Point(6, 139);
+            groupBox6.Name = "groupBox6";
+            groupBox6.Size = new Size(1150, 97);
+            groupBox6.TabIndex = 9;
+            groupBox6.TabStop = false;
+            groupBox6.Text = "OpenSubtitles";
+            // 
+            // cbDownloadMissingSubs
+            // 
+            cbDownloadMissingSubs.AutoSize = true;
+            cbDownloadMissingSubs.Location = new Point(11, 46);
+            cbDownloadMissingSubs.Name = "cbDownloadMissingSubs";
+            cbDownloadMissingSubs.Size = new Size(213, 24);
+            cbDownloadMissingSubs.TabIndex = 6;
+            cbDownloadMissingSubs.Text = "Download missing subtitles";
+            cbDownloadMissingSubs.UseVisualStyleBackColor = true;
+            // 
+            // txtOpenSubtitlesAppName
+            // 
+            txtOpenSubtitlesAppName.Location = new Point(232, 44);
+            txtOpenSubtitlesAppName.Name = "txtOpenSubtitlesAppName";
+            txtOpenSubtitlesAppName.Size = new Size(161, 27);
+            txtOpenSubtitlesAppName.TabIndex = 3;
+            // 
+            // txtOpenSubtitlesApiKey
+            // 
+            txtOpenSubtitlesApiKey.Location = new Point(399, 44);
+            txtOpenSubtitlesApiKey.Name = "txtOpenSubtitlesApiKey";
+            txtOpenSubtitlesApiKey.Size = new Size(365, 27);
+            txtOpenSubtitlesApiKey.TabIndex = 3;
+            // 
+            // txtOpenSubtitlesUsername
+            // 
+            txtOpenSubtitlesUsername.Location = new Point(770, 44);
+            txtOpenSubtitlesUsername.Name = "txtOpenSubtitlesUsername";
+            txtOpenSubtitlesUsername.Size = new Size(190, 27);
+            txtOpenSubtitlesUsername.TabIndex = 3;
+            // 
+            // txtOpenSubtitlesPassword
+            // 
+            txtOpenSubtitlesPassword.Location = new Point(964, 44);
+            txtOpenSubtitlesPassword.Name = "txtOpenSubtitlesPassword";
+            txtOpenSubtitlesPassword.Size = new Size(181, 27);
+            txtOpenSubtitlesPassword.TabIndex = 3;
+            txtOpenSubtitlesPassword.UseSystemPasswordChar = true;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(232, 21);
+            label6.Name = "label6";
+            label6.Size = new Size(81, 20);
+            label6.TabIndex = 4;
+            label6.Text = "App name:";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(399, 21);
+            label3.Name = "label3";
+            label3.Size = new Size(61, 20);
+            label3.TabIndex = 4;
+            label3.Text = "Api key:";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(770, 21);
+            label4.Name = "label4";
+            label4.Size = new Size(78, 20);
+            label4.TabIndex = 4;
+            label4.Text = "Username:";
+            label4.Click += label4_Click;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(964, 21);
+            label5.Name = "label5";
+            label5.Size = new Size(73, 20);
+            label5.TabIndex = 4;
+            label5.Text = "Password:";
+            // 
+            // chkCopyExternalSubs
+            // 
+            chkCopyExternalSubs.AutoSize = true;
+            chkCopyExternalSubs.Location = new Point(6, 30);
+            chkCopyExternalSubs.Name = "chkCopyExternalSubs";
+            chkCopyExternalSubs.Size = new Size(181, 24);
+            chkCopyExternalSubs.TabIndex = 6;
+            chkCopyExternalSubs.Text = "Copy external subtitles";
+            chkCopyExternalSubs.UseVisualStyleBackColor = true;
+            // 
             // chkExtractSubtitles
             // 
             chkExtractSubtitles.AutoSize = true;
-            chkExtractSubtitles.Location = new Point(17, 26);
+            chkExtractSubtitles.Location = new Point(269, 29);
             chkExtractSubtitles.Name = "chkExtractSubtitles";
-            chkExtractSubtitles.Size = new Size(135, 24);
+            chkExtractSubtitles.Size = new Size(216, 24);
             chkExtractSubtitles.TabIndex = 6;
-            chkExtractSubtitles.Text = "Extract subtitles";
+            chkExtractSubtitles.Text = "Extract subtitles from movie";
             chkExtractSubtitles.UseVisualStyleBackColor = true;
             // 
             // labelFfmpegPath
@@ -416,6 +567,15 @@
             txtFFmpegPath.Size = new Size(473, 27);
             txtFFmpegPath.TabIndex = 3;
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(6, 83);
+            label2.Name = "label2";
+            label2.Size = new Size(396, 20);
+            label2.TabIndex = 4;
+            label2.Text = "Subtitle languages (2-letter ISO 639-1, comma-separated):";
+            // 
             // labelSubtitleFormats
             // 
             labelSubtitleFormats.AutoSize = true;
@@ -424,6 +584,14 @@
             labelSubtitleFormats.Size = new Size(291, 20);
             labelSubtitleFormats.TabIndex = 4;
             labelSubtitleFormats.Text = "Valid subtitle Formats (comma-separated):";
+            // 
+            // txtSubtitleLanguages
+            // 
+            txtSubtitleLanguages.Location = new Point(6, 106);
+            txtSubtitleLanguages.Name = "txtSubtitleLanguages";
+            txtSubtitleLanguages.Size = new Size(543, 27);
+            txtSubtitleLanguages.TabIndex = 3;
+            txtSubtitleLanguages.Text = "en, sl";
             // 
             // txtSubtitleFormats
             // 
@@ -436,11 +604,11 @@
             // chkConvertToSrt
             // 
             chkConvertToSrt.AutoSize = true;
-            chkConvertToSrt.Location = new Point(17, 56);
+            chkConvertToSrt.Location = new Point(269, 55);
             chkConvertToSrt.Name = "chkConvertToSrt";
-            chkConvertToSrt.Size = new Size(164, 24);
+            chkConvertToSrt.Size = new Size(273, 24);
             chkConvertToSrt.TabIndex = 6;
-            chkConvertToSrt.Text = "Auto-convert to SRT";
+            chkConvertToSrt.Text = "Auto-convert to SRT when extracting";
             chkConvertToSrt.UseVisualStyleBackColor = true;
             // 
             // btnBrowseFFmpeg
@@ -463,9 +631,9 @@
             groupBox1.Controls.Add(timeScheduleStart);
             groupBox1.Controls.Add(timeScheduleEnd);
             groupBox1.Controls.Add(chkRunOnSchedule);
-            groupBox1.Location = new Point(6, 533);
+            groupBox1.Location = new Point(6, 588);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(1162, 127);
+            groupBox1.Size = new Size(1162, 89);
             groupBox1.TabIndex = 10;
             groupBox1.TabStop = false;
             groupBox1.Text = "Schedule";
@@ -479,9 +647,9 @@
             groupBox2.Controls.Add(chkWednesday);
             groupBox2.Controls.Add(chkTuesday);
             groupBox2.Controls.Add(chkMonday);
-            groupBox2.Location = new Point(441, 23);
+            groupBox2.Location = new Point(731, 23);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(472, 93);
+            groupBox2.Size = new Size(428, 59);
             groupBox2.TabIndex = 8;
             groupBox2.TabStop = false;
             groupBox2.Text = "Days to run";
@@ -489,7 +657,7 @@
             // chkSunday
             // 
             chkSunday.AutoSize = true;
-            chkSunday.Location = new Point(397, 42);
+            chkSunday.Location = new Point(372, 26);
             chkSunday.Name = "chkSunday";
             chkSunday.Size = new Size(55, 24);
             chkSunday.TabIndex = 0;
@@ -499,7 +667,7 @@
             // chkSaturday
             // 
             chkSaturday.AutoSize = true;
-            chkSaturday.Location = new Point(339, 43);
+            chkSaturday.Location = new Point(314, 27);
             chkSaturday.Name = "chkSaturday";
             chkSaturday.Size = new Size(52, 24);
             chkSaturday.TabIndex = 0;
@@ -509,7 +677,7 @@
             // chkFriday
             // 
             chkFriday.AutoSize = true;
-            chkFriday.Location = new Point(286, 43);
+            chkFriday.Location = new Point(261, 27);
             chkFriday.Name = "chkFriday";
             chkFriday.Size = new Size(47, 24);
             chkFriday.TabIndex = 0;
@@ -519,7 +687,7 @@
             // chkThursday
             // 
             chkThursday.AutoSize = true;
-            chkThursday.Location = new Point(225, 43);
+            chkThursday.Location = new Point(200, 27);
             chkThursday.Name = "chkThursday";
             chkThursday.Size = new Size(55, 24);
             chkThursday.TabIndex = 0;
@@ -529,7 +697,7 @@
             // chkWednesday
             // 
             chkWednesday.AutoSize = true;
-            chkWednesday.Location = new Point(159, 43);
+            chkWednesday.Location = new Point(134, 27);
             chkWednesday.Name = "chkWednesday";
             chkWednesday.Size = new Size(60, 24);
             chkWednesday.TabIndex = 0;
@@ -539,7 +707,7 @@
             // chkTuesday
             // 
             chkTuesday.AutoSize = true;
-            chkTuesday.Location = new Point(98, 43);
+            chkTuesday.Location = new Point(73, 27);
             chkTuesday.Name = "chkTuesday";
             chkTuesday.Size = new Size(55, 24);
             chkTuesday.TabIndex = 0;
@@ -549,7 +717,7 @@
             // chkMonday
             // 
             chkMonday.AutoSize = true;
-            chkMonday.Location = new Point(31, 42);
+            chkMonday.Location = new Point(6, 26);
             chkMonday.Name = "chkMonday";
             chkMonday.Size = new Size(61, 24);
             chkMonday.TabIndex = 0;
@@ -559,7 +727,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(300, 65);
+            label1.Location = new Point(614, 23);
             label1.Name = "label1";
             label1.Size = new Size(28, 20);
             label1.TabIndex = 4;
@@ -568,7 +736,7 @@
             // timeScheduleEnd
             // 
             timeScheduleEnd.Format = DateTimePickerFormat.Time;
-            timeScheduleEnd.Location = new Point(300, 88);
+            timeScheduleEnd.Location = new Point(614, 46);
             timeScheduleEnd.Name = "timeScheduleEnd";
             timeScheduleEnd.ShowUpDown = true;
             timeScheduleEnd.Size = new Size(112, 27);
@@ -866,15 +1034,17 @@
             txtLog.TabIndex = 0;
             txtLog.Text = "";
             // 
-            // chkCopyExternalSubs
+            // chkOverwriteExistingSubtitles
             // 
-            chkCopyExternalSubs.AutoSize = true;
-            chkCopyExternalSubs.Location = new Point(17, 86);
-            chkCopyExternalSubs.Name = "chkCopyExternalSubs";
-            chkCopyExternalSubs.Size = new Size(181, 24);
-            chkCopyExternalSubs.TabIndex = 6;
-            chkCopyExternalSubs.Text = "Copy external subtitles";
-            chkCopyExternalSubs.UseVisualStyleBackColor = true;
+            chkOverwriteExistingSubtitles.AutoSize = true;
+            chkOverwriteExistingSubtitles.Checked = true;
+            chkOverwriteExistingSubtitles.CheckState = CheckState.Checked;
+            chkOverwriteExistingSubtitles.Location = new Point(6, 54);
+            chkOverwriteExistingSubtitles.Name = "chkOverwriteExistingSubtitles";
+            chkOverwriteExistingSubtitles.Size = new Size(150, 24);
+            chkOverwriteExistingSubtitles.TabIndex = 6;
+            chkOverwriteExistingSubtitles.Text = "Overwrite existing";
+            chkOverwriteExistingSubtitles.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -895,6 +1065,8 @@
             groupBox4.PerformLayout();
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
+            groupBox6.ResumeLayout(false);
+            groupBox6.PerformLayout();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             groupBox2.ResumeLayout(false);
@@ -983,5 +1155,20 @@
         private GroupBox groupBox4;
         private GroupBox groupBox5;
         private CheckBox chkCopyExternalSubs;
+        private Label label2;
+        private TextBox txtSubtitleLanguages;
+        private Label label3;
+        private TextBox txtOpenSubtitlesApiKey;
+        private Label label5;
+        private Label label4;
+        private TextBox txtOpenSubtitlesPassword;
+        private TextBox txtOpenSubtitlesUsername;
+        private CheckBox cbDownloadMissingSubs;
+        private GroupBox groupBox6;
+        private TextBox txtOpenSubtitlesAppName;
+        private Label label6;
+        private CheckBox cbEnableTranscoding;
+        private CheckBox chkOverwriteExistingVideos;
+        private CheckBox chkOverwriteExistingSubtitles;
     }
 }

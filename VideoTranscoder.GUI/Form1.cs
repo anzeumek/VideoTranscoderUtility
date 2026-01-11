@@ -45,6 +45,8 @@ namespace VideoTranscoder.GUI
 
             txtOutputDir.Text = _settings.OutputDirectory;
             txtHandBrakePath.Text = _settings.HandBrakePath;
+            cbEnableTranscoding.Checked = _settings.EnableTranscoding;
+            chkOverwriteExistingVideos.Checked = _settings.OverwriteExistingVideos;
             txtOutputFileExtension.Text = _settings.OutputFileExtension;
             chkPreserveFolderStructure.Checked = _settings.PreserveFolderStructure;
             txtParameters.Text = _settings.HandBrakeParameters;
@@ -63,11 +65,20 @@ namespace VideoTranscoder.GUI
             chkSunday.Checked = _settings.RunOnSunday;
 
             // Subtitle settings
+            cbDownloadMissingSubs.Checked = _settings.DownloadSubtitles;
             txtFFmpegPath.Text = _settings.FFmpegPath;
             chkExtractSubtitles.Checked = _settings.ExtractSubtitles;
             txtSubtitleFormats.Text = _settings.SubtitleFormats;
             chkConvertToSrt.Checked = _settings.ConvertToSrtIfMissing;
             chkCopyExternalSubs.Checked = _settings.CopyExternalSubtitles;
+            txtSubtitleLanguages.Text = _settings.SubtitleLanguages;
+            chkOverwriteExistingSubtitles.Checked = _settings.OverwriteExistingSubtitles;
+
+            // Subtitle download settings
+            txtOpenSubtitlesAppName.Text = _settings.OpenSubtitlesAppName;
+            txtOpenSubtitlesApiKey.Text = _settings.OpenSubtitlesApiKey;
+            txtOpenSubtitlesUsername.Text = _settings.OpenSubtitlesUsername;
+            txtOpenSubtitlesPassword.Text = _settings.OpenSubtitlesPassword;
 
             chkDeleteOriginal.Checked = _settings.DeleteOriginalAfterTranscode;
         }
@@ -99,6 +110,8 @@ namespace VideoTranscoder.GUI
             // Update settings from UI
             _settings.OutputDirectory = txtOutputDir.Text;
             _settings.HandBrakePath = txtHandBrakePath.Text;
+            _settings.EnableTranscoding = cbEnableTranscoding.Checked;
+            _settings.OverwriteExistingVideos = chkOverwriteExistingVideos.Checked;
             _settings.OutputFileExtension = txtOutputFileExtension.Text;
             _settings.PreserveFolderStructure = chkPreserveFolderStructure.Checked;
             _settings.HandBrakeParameters = txtParameters.Text;
@@ -124,6 +137,15 @@ namespace VideoTranscoder.GUI
             _settings.SubtitleFormats = txtSubtitleFormats.Text;
             _settings.ConvertToSrtIfMissing = chkConvertToSrt.Checked;
             _settings.CopyExternalSubtitles = chkCopyExternalSubs.Checked;
+            _settings.SubtitleLanguages = txtSubtitleLanguages.Text;
+            _settings.OverwriteExistingSubtitles = chkOverwriteExistingSubtitles.Checked;
+
+            // Subtitle download settings
+            _settings.DownloadSubtitles = cbDownloadMissingSubs.Checked;
+            _settings.OpenSubtitlesAppName = txtOpenSubtitlesAppName.Text;
+            _settings.OpenSubtitlesApiKey = txtOpenSubtitlesApiKey.Text;
+            _settings.OpenSubtitlesUsername = txtOpenSubtitlesUsername.Text;
+            _settings.OpenSubtitlesPassword = txtOpenSubtitlesPassword.Text;
 
             // Source video file
             _settings.DeleteOriginalAfterTranscode = chkDeleteOriginal.Checked;
@@ -250,7 +272,7 @@ namespace VideoTranscoder.GUI
 
             if (dgvHistory.Columns["Date"] != null)
             {
-                dgvHistory.Columns["Date"].HeaderText = "Transcoded Date";
+                dgvHistory.Columns["Date"].HeaderText = "Processed Date";
                 dgvHistory.Columns["Date"].DefaultCellStyle.Format = "yyyy-MM-dd HH:mm:ss";
             }
 
@@ -276,9 +298,7 @@ namespace VideoTranscoder.GUI
             string sourceFile = selectedRow.Cells["SourceFile"].Value.ToString();
             string status = selectedRow.Cells["Status"].Value.ToString();
 
-            string message = status == "Success"
-              ? $"Remove this file from history?\n\n{sourceFile}\n\nIt was successfully transcoded. Removing it will allow retranscoding."
-              : $"Remove this file from history?\n\n{sourceFile}\n\n";
+            string message = $"Remove this file from history?\n\n{sourceFile}\n\n. Removing it will allow file to be processed again.";
 
             var result = MessageBox.Show(
                 message,
@@ -306,7 +326,7 @@ namespace VideoTranscoder.GUI
         {
             var result = MessageBox.Show(
                 "Are you sure you want to clear ALL history?\n\n" +
-                "This will allow all previously transcoded files to be transcoded again.",
+                "This will allow all previously processed files to be processed again.",
                 "Confirm Clear All",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Warning);
@@ -922,6 +942,11 @@ namespace VideoTranscoder.GUI
             var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
             var principal = new System.Security.Principal.WindowsPrincipal(identity);
             return principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator);
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
         }
     }
 

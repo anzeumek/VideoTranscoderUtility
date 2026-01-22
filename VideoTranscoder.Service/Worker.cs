@@ -360,6 +360,15 @@ namespace VideoTranscoder.Service
                         _fileLogger.LogToFile("Stop requested during processing video files");
                         return;
                     }
+
+                    //check if still in scheduled window
+                    if (!IsWithinScheduledWindow())
+                    {
+                        _logger.LogInformation("Outside scheduled window. Video processing will not continue.");
+                        _fileLogger.LogToFile("Outside scheduled window. Video processing will not continue.");
+                        return;
+                    }
+
                     try
                     {
                         // Check if already transcoded
